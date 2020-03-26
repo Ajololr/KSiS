@@ -4,9 +4,11 @@ import java.net.*;
 
 public class UDPsocket extends Thread {
     private DatagramSocket datagramSocket;
-    private byte[] buf = new byte[256];
+    private byte[] buf = new byte[4];
+    private int serverPort;
 
-    public UDPsocket() {
+    public UDPsocket(int port) {
+        serverPort = port;
         start();
     }
 
@@ -24,6 +26,12 @@ public class UDPsocket extends Thread {
 
                 InetAddress address = packet.getAddress();
                 int port = packet.getPort();
+                System.out.println(serverPort);
+                buf[0] = (byte)((serverPort >> 24) & 0xff);
+                buf[1] = (byte)((serverPort >> 16) & 0xff);
+                buf[2] = (byte)((serverPort >> 8) & 0xff);
+                buf[3] = (byte)((serverPort >> 0) & 0xff);
+                System.out.println("Server sends " + address.toString() + ":" + port + " port ");
                 packet = new DatagramPacket(buf, buf.length, address, port);
                 datagramSocket.send(packet);
             }

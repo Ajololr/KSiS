@@ -13,10 +13,10 @@ public class Server {
     public static LinkedList<TCPsocket> serverList = new LinkedList<>();
 
     public static void main(String[] args) {
-        connectionListener = new UDPsocket();
-
         try {
-            ServerSocket server = new ServerSocket();
+            ServerSocket server = new ServerSocket(1123);
+            connectionListener = new UDPsocket(server.getLocalPort());
+
             try {
                 while (true) {
                     Socket socket = server.accept();
