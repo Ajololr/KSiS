@@ -1,6 +1,8 @@
 package Client;
 
-import javax.swing.plaf.basic.BasicScrollPaneUI;
+import Client.ChatWindow.ChatWindow;
+import Client.LoginWindow.LoginWindow;
+
 import java.io.*;
 import java.net.*;
 import java.nio.ByteBuffer;
@@ -9,23 +11,13 @@ import java.util.Date;
 
 public class Client {
     private static Socket clientSocket;
-    private static BufferedReader reader;
     private static BufferedReader in;
     private static BufferedWriter out;
     private String nickname;
     private Date time;
     private String dtime;
     private SimpleDateFormat dt1;
-
-    private void pressNickname() {
-        System.out.print("Press your nick: ");
-        try {
-            nickname = reader.readLine();
-            out.write(nickname + " enters the chat :)" + "\n");
-            out.flush();
-        } catch (IOException ignored) {
-        }
-    }
+    private ChatWindow app;
 
     private class ReadMsg extends Thread {
         @Override
@@ -38,7 +30,7 @@ public class Client {
                         downService();
                         break;
                     }
-                    System.out.println(str);
+                    app.displayMsg(str + "\n");
                 }
             } catch (IOException e) {
                 downService();
@@ -46,28 +38,20 @@ public class Client {
         }
     }
 
-    public class WriteMsg extends Thread {
-        @Override
-        public void run() {
-            while (true) {
-                String userWord;
-                try {
-                    time = new Date();
-                    dt1 = new SimpleDateFormat("HH:mm:ss");
-                    dtime = dt1.format(time);
-                    userWord = reader.readLine();
-                    if (userWord.equals("exit")) {
-                        out.write("exit" + "\n");
-                        downService();
-                        break;
-                    } else {
-                        out.write("(" + dtime + ") " + nickname + ": " + userWord + "\n");
-                    }
-                    out.flush();
-                } catch (IOException e) {
-                    downService();
-                }
+    public void WriteMsg(String userWord) {
+        try {
+            time = new Date();
+            dt1 = new SimpleDateFormat("HH:mm:ss");
+            dtime = dt1.format(time);
+            if (userWord.equals("exit")) {
+                out.write("exit" + "\n");
+                downService();
+            } else {
+                out.write("(" + dtime + ") " + nickname + ": " + userWord + "\n");
             }
+            out.flush();
+        } catch (IOException e) {
+            downService();
         }
     }
 
@@ -78,12 +62,12 @@ public class Client {
                 clientSocket.close();
                 in.close();
                 out.close();
-                reader.close();
             }
         } catch (IOException ignored) {}
     }
 
-    public Client() {
+    public Client(String nickname) {
+        this.nickname = nickname;
         byte buf[] = new byte[4];
         try {
             System.out.println("Client wants to connect!");
@@ -97,20 +81,17 @@ public class Client {
             InetAddress address = datagramPacket.getAddress();
             ByteBuffer byteBuffer = ByteBuffer.wrap(datagramPacket.getData());
             int port = byteBuffer.getInt();
-
             try {
                 System.out.println("Client connects to " + address.toString() + ":" + port);
                 clientSocket = new Socket(address, port);
+                app = new ChatWindow(this);
             } catch (IOException ex) {
                 System.err.println("Socket failed");
             }
             try {
-                reader = new BufferedReader(new InputStreamReader(System.in));
                 in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
                 new ReadMsg().start();
-                new WriteMsg().start();
-                pressNickname();
             } catch (IOException ex) {
                 downService();
             }
@@ -119,6 +100,6 @@ public class Client {
     }
 
     public static void main(String[] args) {
-        new Client();
+        new LoginWindow();
     }
 }
