@@ -13,6 +13,9 @@ public class TCPsocket extends Thread {
         this.socket = socket;
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+        for (String msg : Server.msgList) {
+            this.send(msg);
+        }
         start();
     }
 
@@ -26,12 +29,13 @@ public class TCPsocket extends Thread {
                     this.downService();
                     break;
                 }
+                Server.msgList.add(word);
                 for (TCPsocket clientSocket : Server.serverList) {
                     clientSocket.send(word);
                 }
             }
 
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             this.downService();
         }
     }

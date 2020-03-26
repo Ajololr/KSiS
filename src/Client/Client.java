@@ -21,7 +21,7 @@ public class Client {
         System.out.print("Press your nick: ");
         try {
             nickname = reader.readLine();
-            out.write("Hello " + nickname + "\n");
+            out.write(nickname + " enters the chat :)" + "\n");
             out.flush();
         } catch (IOException ignored) {
         }
@@ -61,13 +61,12 @@ public class Client {
                         downService();
                         break;
                     } else {
-                        out.write("(" + dtime + ") " + nickname + ": " + userWord + "\n"); // отправляем на сервер
+                        out.write("(" + dtime + ") " + nickname + ": " + userWord + "\n");
                     }
                     out.flush();
                 } catch (IOException e) {
                     downService();
                 }
-
             }
         }
     }
@@ -109,9 +108,9 @@ public class Client {
                 reader = new BufferedReader(new InputStreamReader(System.in));
                 in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-                pressNickname();
                 new ReadMsg().start();
                 new WriteMsg().start();
+                pressNickname();
             } catch (IOException ex) {
                 downService();
             }
