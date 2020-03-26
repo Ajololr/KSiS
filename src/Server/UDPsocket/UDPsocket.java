@@ -1,4 +1,4 @@
-package server.UDPsocket;
+package Server.UDPsocket;
 
 import java.net.*;
 
