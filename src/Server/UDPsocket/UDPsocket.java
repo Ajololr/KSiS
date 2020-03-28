@@ -37,7 +37,7 @@ public class UDPsocket extends Thread {
         }
         catch(SocketException se)
         {
-            System.out.print("!Server socket could not be opened\n");
+            System.out.println("Server socket could not be opened!");
         }
         catch(Exception ex) {
         }

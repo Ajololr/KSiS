@@ -12,6 +12,7 @@ public class Server {
     private static UDPsocket connectionListener;
     public static LinkedList<TCPsocket> serverList = new LinkedList<>();
     public static LinkedList<String> msgList = new LinkedList<>();
+    public static LinkedList<String> membersList = new LinkedList<>();
 
     public static void main(String[] args) {
         try {
