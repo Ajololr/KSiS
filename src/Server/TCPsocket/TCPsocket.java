@@ -6,13 +6,13 @@ import Server.Server;
 
 public class TCPsocket extends Thread {
     private Socket socket;
-    private BufferedReader in;
-    private BufferedWriter out;
+    private BufferedReader inputStream;
+    private BufferedWriter outputStream;
 
     public TCPsocket(Socket socket) throws IOException {
         this.socket = socket;
-        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+        inputStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        outputStream = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         for (String msg : Server.msgList) {
             this.send(msg);
         }
@@ -22,12 +22,26 @@ public class TCPsocket extends Thread {
         start();
     }
 
+    private void deleteMember(int sender, int receiver, String text) {
+        String msg = "2 " + sender + " " + receiver + " " + text;
+        for (TCPsocket clientSocket : Server.serverList) {
+            clientSocket.send(msg);
+        }
+        this.downService();
+    }
+
+    private void addMember(String member, String msg) {
+        Server.membersList.add(member);
+        for (TCPsocket clientSocket : Server.serverList) {
+            clientSocket.send(msg);
+        }
+    }
+
     @Override
     public void run() {
         try {
             while (true) {
-                String msg = in.readLine();
-                System.out.println(msg);
+                String msg = inputStream.readLine();
                 String[] data = msg.split(" ", 4);
                 int command = Integer.parseInt(data[0]);
                 int sender = Server.serverList.indexOf(this) + 1;
@@ -35,33 +49,13 @@ public class TCPsocket extends Thread {
                 String text = data[3];
                 switch (command) {
                     case 0:
-                        if (receiver == 0) {
-                            Server.msgList.add(msg);
-                            for (TCPsocket clientSocket : Server.serverList) {
-                                clientSocket.send(msg);
-                            }
-                        } else {
-                            System.out.println("Server sends " + text + " from " + sender + " to " + receiver);
-                            msg = command + " " + sender + " " + receiver + " " + text;
-                            Server.serverList.get(receiver - 1).send(msg);
-                            if (sender != receiver) {
-                                msg = command + " " + receiver + " " + sender + " " + text;
-                                Server.serverList.get(sender - 1).send(msg);
-                            }
-                        }
+                        send(sender, receiver, text, msg);
                         break;
                     case 1:
-                        Server.membersList.add(text);
-                        for (TCPsocket clientSocket : Server.serverList) {
-                            clientSocket.send(msg);
-                        }
+                        addMember(text, msg);
                         break;
                     case 2:
-                        msg = command + " " + sender + " " + receiver + " " + text;
-                        for (TCPsocket clientSocket : Server.serverList) {
-                            clientSocket.send(msg);
-                        }
-                        this.downService();
+                        deleteMember(sender, receiver, text);
                         break;
                     default:
                         System.out.println("Unrecognized command" + command);
@@ -72,10 +66,27 @@ public class TCPsocket extends Thread {
         }
     }
 
+    private void send(int sender, int receiver, String text, String msg) {
+        if (receiver == 0) {
+            Server.msgList.add(msg);
+            for (TCPsocket clientSocket : Server.serverList) {
+                clientSocket.send(msg);
+            }
+        } else {
+            System.out.println("Server sends " + text + " from " + sender + " to " + receiver);
+            msg = "0 " + sender + " " + receiver + " " + text;
+            Server.serverList.get(receiver - 1).send(msg);
+            if (sender != receiver) {
+                msg = "0 " + receiver + " " + sender + " " + text;
+                Server.serverList.get(sender - 1).send(msg);
+            }
+        }
+    }
+
     private void send(String msg) {
         try {
-            out.write(msg + "\n");
-            out.flush();
+            outputStream.write(msg + "\n");
+            outputStream.flush();
         } catch (IOException ignored) {}
     }
 
@@ -84,8 +95,8 @@ public class TCPsocket extends Thread {
             if(!socket.isClosed()) {
                 System.out.println("TCP socket is being turned off...");
                 socket.close();
-                in.close();
-                out.close();
+                inputStream.close();
+                outputStream.close();
                 for (TCPsocket clientSocket : Server.serverList) {
                     if(clientSocket.equals(this)) clientSocket.interrupt();
                     int index = Server.serverList.indexOf(this);

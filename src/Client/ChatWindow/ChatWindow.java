@@ -1,31 +1,25 @@
 package Client.ChatWindow;
 
-import Client.Client;
-
+import Client.ClientSocket.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.LinkedList;
 
 public class ChatWindow extends Frame implements WindowListener {
-    public LinkedList<LinkedList<String>> chats = new LinkedList<>();
-    public Label membersLbl;
-    public Label msgLbl;
+    public LinkedList<LinkedList<String>> membersList = new LinkedList<>();
     public Button sendButton;
     public List chatsList;
     public TextField msgField;
     public TextArea chatArea;
-    private Client client;
-    private byte currentChatIndex;
+    private ClientSocket client;
+    private int currentChatIndex;
 
-    public ChatWindow(Client client) {
+    public ChatWindow(ClientSocket client) {
         addWindowListener(this);
         this.client = client;
-        chats.add(new LinkedList<>());
+        membersList.add(new LinkedList<>());
         setLayout(new FlowLayout(FlowLayout.LEFT));
-
-        membersLbl = new Label("Members:");
-        msgLbl = new Label("Message:");
 
         sendButton = new Button("Send");
 
@@ -40,27 +34,26 @@ public class ChatWindow extends Frame implements WindowListener {
         chatArea.setEditable(false);
 
         chatsList.addActionListener(actionEvent -> {
-            currentChatIndex = (byte)chatsList.getSelectedIndex();
+            currentChatIndex = (int)chatsList.getSelectedIndex();
             chatArea.setText("");
-            for (String text : chats.get(currentChatIndex)) {
+            for (String text : membersList.get(currentChatIndex)) {
                 chatArea.append(text);
             }
         });
 
         sendButton.addActionListener(actionEvent -> {
             if (msgField.getText().trim() != "") {
-                client.WriteMsg(msgField.getText().trim(), currentChatIndex);
+                client.send(msgField.getText().trim(), currentChatIndex);
                 msgField.setText("");
             }
         });
 
         msgField.addActionListener(actionEvent -> {
             if (msgField.getText().trim() != "") {
-                client.WriteMsg(msgField.getText().trim(), currentChatIndex);
+                client.send(msgField.getText().trim(), currentChatIndex);
                 msgField.setText("");
             }
         });
-
 
         add(chatArea);
         add(chatsList);
@@ -73,7 +66,7 @@ public class ChatWindow extends Frame implements WindowListener {
     }
 
     public void addMsg(String msg, int index) {
-        chats.get(index).add(msg);
+        membersList.get(index).add(msg);
         if (currentChatIndex == index) {
             chatArea.append(msg);
         }
@@ -82,25 +75,23 @@ public class ChatWindow extends Frame implements WindowListener {
     public void deleteChat(int index) {
         if (index == currentChatIndex) {
             currentChatIndex = 0;
+            chatsList.select(0);
             chatArea.setText("");
-            for (String text : chats.get(currentChatIndex)) {
+            for (String text : membersList.get(currentChatIndex)) {
                 chatArea.append(text);
             }
         }
         chatsList.remove(index);
-        chats.remove(index);
+        membersList.remove(index);
     }
 
     public void addChat(String nickname) {
         chatsList.add(nickname);
-        chats.add(new LinkedList<>());
-        repaint();
+        membersList.add(new LinkedList<>());
     }
 
     @Override
-    public void windowOpened(WindowEvent windowEvent) {
-
-    }
+    public void windowOpened(WindowEvent windowEvent) { }
 
     @Override
     public void windowClosing(WindowEvent windowEvent) {
@@ -109,26 +100,17 @@ public class ChatWindow extends Frame implements WindowListener {
     }
 
     @Override
-    public void windowClosed(WindowEvent windowEvent) {
-    }
+    public void windowClosed(WindowEvent windowEvent) { }
 
     @Override
-    public void windowIconified(WindowEvent windowEvent) {
-
-    }
+    public void windowIconified(WindowEvent windowEvent) { }
 
     @Override
-    public void windowDeiconified(WindowEvent windowEvent) {
-
-    }
+    public void windowDeiconified(WindowEvent windowEvent) { }
 
     @Override
-    public void windowActivated(WindowEvent windowEvent) {
-
-    }
+    public void windowActivated(WindowEvent windowEvent) { }
 
     @Override
-    public void windowDeactivated(WindowEvent windowEvent) {
-
-    }
+    public void windowDeactivated(WindowEvent windowEvent) { }
 }

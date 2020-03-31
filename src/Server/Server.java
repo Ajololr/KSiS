@@ -2,7 +2,6 @@ package Server;
 
 import Server.TCPsocket.TCPsocket;
 import Server.UDPsocket.UDPsocket;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -18,7 +17,6 @@ public class Server {
         try {
             ServerSocket server = new ServerSocket(1123);
             connectionListener = new UDPsocket(server.getLocalPort());
-
             try {
                 while (true) {
                     Socket socket = server.accept();
@@ -32,6 +30,8 @@ public class Server {
                 server.close();
             }
         } catch (IOException ex) {
+            System.out.println("Server error.");
+            connectionListener.downService();
         }
     }
 }

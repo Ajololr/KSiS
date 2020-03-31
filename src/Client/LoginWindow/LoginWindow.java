@@ -1,6 +1,6 @@
 package Client.LoginWindow;
 
-import Client.Client;
+import Client.ClientSocket.ClientSocket;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -19,7 +19,7 @@ public class LoginWindow extends Frame implements WindowListener {
         nameField = new TextField(10);
 
         joinButton.addActionListener(actionEvent -> {
-            new Client(nameField.getText());
+            new ClientSocket(nameField.getText());
             this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         });
 
@@ -28,7 +28,7 @@ public class LoginWindow extends Frame implements WindowListener {
         });
 
         nameField.addActionListener(actionEvent -> {
-            new Client(nameField.getText());
+            new ClientSocket(nameField.getText());
             this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         });
 
@@ -36,15 +36,13 @@ public class LoginWindow extends Frame implements WindowListener {
         add(nameField);
         add(joinButton);
 
-        this.setSize(300, 300);
+        this.setSize(300, 100);
         this.setVisible(true);
         this.setTitle("Lab-2");
     }
 
     @Override
-    public void windowOpened(WindowEvent windowEvent) {
-
-    }
+    public void windowOpened(WindowEvent windowEvent) { }
 
     @Override
     public void windowClosing(WindowEvent windowEvent) {
@@ -52,27 +50,17 @@ public class LoginWindow extends Frame implements WindowListener {
     }
 
     @Override
-    public void windowClosed(WindowEvent windowEvent) {
-
-    }
+    public void windowClosed(WindowEvent windowEvent) { }
 
     @Override
-    public void windowIconified(WindowEvent windowEvent) {
-
-    }
+    public void windowIconified(WindowEvent windowEvent) { }
 
     @Override
-    public void windowDeiconified(WindowEvent windowEvent) {
-
-    }
+    public void windowDeiconified(WindowEvent windowEvent) { }
 
     @Override
-    public void windowActivated(WindowEvent windowEvent) {
-
-    }
+    public void windowActivated(WindowEvent windowEvent) { }
 
     @Override
-    public void windowDeactivated(WindowEvent windowEvent) {
-
-    }
+    public void windowDeactivated(WindowEvent windowEvent) { }
 }
