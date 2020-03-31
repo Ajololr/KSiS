@@ -97,12 +97,10 @@ public class TCPsocket extends Thread {
                 socket.close();
                 inputStream.close();
                 outputStream.close();
-                for (TCPsocket clientSocket : Server.serverList) {
-                    if(clientSocket.equals(this)) clientSocket.interrupt();
-                    int index = Server.serverList.indexOf(this);
-                    Server.serverList.remove(this);
-                    Server.membersList.remove(index);
-                }
+                this.interrupt();
+                int index = Server.serverList.indexOf(this);
+                Server.serverList.remove(this);
+                Server.membersList.remove(index);
             }
         } catch (IOException ignored) {}
     }

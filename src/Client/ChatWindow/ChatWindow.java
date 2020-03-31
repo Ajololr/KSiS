@@ -62,7 +62,7 @@ public class ChatWindow extends Frame implements WindowListener {
 
         this.setSize(500,310);
         this.setVisible(true);
-        this.setTitle("Lab-2");
+        this.setTitle(client.nickname);
     }
 
     public void addMsg(String msg, int index) {

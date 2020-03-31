@@ -30,8 +30,7 @@ public class Server {
                 server.close();
             }
         } catch (IOException ex) {
-            System.out.println("Server error.");
-            connectionListener.downService();
+            System.out.println("Server initialization error (port is might being used).");
         }
     }
 }
