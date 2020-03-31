@@ -6,8 +6,9 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.LinkedList;
 
+
 public class ChatWindow extends Frame implements WindowListener {
-    public LinkedList<LinkedList<String>> membersList = new LinkedList<>();
+    public LinkedList<ChatMessages> chatsMessagesList = new LinkedList<>();
     public Button sendButton;
     public List chatsList;
     public TextField msgField;
@@ -15,10 +16,23 @@ public class ChatWindow extends Frame implements WindowListener {
     private ClientSocket client;
     private int currentChatIndex;
 
+
+    private class ChatMessages {
+        public String chatName;
+        public LinkedList<String> messagesList;
+        public int unreadMessagesCount;
+
+        private ChatMessages(String chatName) {
+            this.chatName = chatName;
+            messagesList = new LinkedList();
+            unreadMessagesCount = 0;
+        }
+    }
+
     public ChatWindow(ClientSocket client) {
         addWindowListener(this);
         this.client = client;
-        membersList.add(new LinkedList<>());
+        chatsMessagesList.add(new ChatMessages("Global chat"));
         setLayout(new FlowLayout(FlowLayout.LEFT));
 
         sendButton = new Button("Send");
@@ -34,22 +48,26 @@ public class ChatWindow extends Frame implements WindowListener {
         chatArea.setEditable(false);
 
         chatsList.addActionListener(actionEvent -> {
-            currentChatIndex = (int)chatsList.getSelectedIndex();
+            currentChatIndex = chatsList.getSelectedIndex();
+            chatsList.remove(currentChatIndex);
+            chatsList.add(chatsMessagesList.get(currentChatIndex).chatName, currentChatIndex);
+            chatsList.select(currentChatIndex);
+            chatsMessagesList.get(currentChatIndex).unreadMessagesCount = 0;
             chatArea.setText("");
-            for (String text : membersList.get(currentChatIndex)) {
+            for (String text : chatsMessagesList.get(currentChatIndex).messagesList) {
                 chatArea.append(text);
             }
         });
 
         sendButton.addActionListener(actionEvent -> {
-            if (msgField.getText().trim() != "") {
+            if (!msgField.getText().trim().equals("")) {
                 client.send(msgField.getText().trim(), currentChatIndex);
                 msgField.setText("");
             }
         });
 
         msgField.addActionListener(actionEvent -> {
-            if (msgField.getText().trim() != "") {
+            if (!msgField.getText().trim().equals("")) {
                 client.send(msgField.getText().trim(), currentChatIndex);
                 msgField.setText("");
             }
@@ -66,9 +84,12 @@ public class ChatWindow extends Frame implements WindowListener {
     }
 
     public void addMsg(String msg, int index) {
-        membersList.get(index).add(msg);
+        chatsMessagesList.get(index).messagesList.add(msg);
         if (currentChatIndex == index) {
             chatArea.append(msg);
+        } else {
+            chatsList.remove(index);
+            chatsList.add(chatsMessagesList.get(index).chatName + " (" + (++chatsMessagesList.get(index).unreadMessagesCount) + ")", index);
         }
     }
 
@@ -77,17 +98,17 @@ public class ChatWindow extends Frame implements WindowListener {
             currentChatIndex = 0;
             chatsList.select(0);
             chatArea.setText("");
-            for (String text : membersList.get(currentChatIndex)) {
+            for (String text : chatsMessagesList.get(currentChatIndex).messagesList) {
                 chatArea.append(text);
             }
         }
         chatsList.remove(index);
-        membersList.remove(index);
+        chatsMessagesList.remove(index);
     }
 
     public void addChat(String nickname) {
         chatsList.add(nickname);
-        membersList.add(new LinkedList<>());
+        chatsMessagesList.add(new ChatMessages(nickname));
     }
 
     @Override
