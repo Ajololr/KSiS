@@ -11,8 +11,8 @@ public class TCPsocket extends Thread {
 
     public TCPsocket(Socket socket) throws IOException {
         this.socket = socket;
-        inputStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        outputStream = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+        inputStream = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
+        outputStream = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
         for (String msg : Server.msgList) {
             this.send(msg);
         }

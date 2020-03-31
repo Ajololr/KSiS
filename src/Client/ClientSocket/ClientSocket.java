@@ -114,8 +114,8 @@ public class ClientSocket {
         this.nickname = nickname;
         connectToServer();
         try {
-            inputStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            outputStream = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+            inputStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream(), "UTF-8"));
+            outputStream = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream(), "UTF-8"));
             app = new ChatWindow(this);
             new Reader().start();
             this.addUser(nickname);
