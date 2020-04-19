@@ -2,16 +2,16 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 import java.io.*;
-import java.math.BigInteger;
+import java.net.HttpURLConnection;
 import java.nio.file.FileAlreadyExistsException;
 import java.util.HashMap;
 
 public class ApiHttpHandler implements HttpHandler {
     private static final String FILES_FOLDER_NAME = "D:\\University\\4 semester\\KSiS\\lab-3\\src\\Files\\";
-    private static HashMap<Integer, File> filesMap = new HashMap<Integer, File>();
+    private static HashMap<Integer, File> filesMap = new HashMap<>();
 
     @Override
-    public void handle(HttpExchange httpExchange) throws IOException {
+    public void handle(HttpExchange httpExchange) {
         String requestMethod = httpExchange.getRequestMethod();
         switch (requestMethod) {
             case "POST":
@@ -35,7 +35,7 @@ public class ApiHttpHandler implements HttpHandler {
 
     private void handleUnrecognizedRequest(HttpExchange httpExchange) {
         try {
-            httpExchange.sendResponseHeaders(501, 0);
+            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_NOT_IMPLEMENTED, 0);
             OutputStream outputStream = httpExchange.getResponseBody();
             outputStream.flush();
         } catch (IOException ex) {
@@ -44,51 +44,22 @@ public class ApiHttpHandler implements HttpHandler {
     }
 
     private void handleDeleteRequest(HttpExchange httpExchange) {
-        try {
-            httpExchange.sendResponseHeaders(501, 0);
-            OutputStream outputStream = httpExchange.getResponseBody();
-            outputStream.flush();
-        } catch (IOException ex) {
-            System.out.println(this.toString() + ": " + ex.getMessage());
-        }
-    }
-
-    private void handleGetRequest(HttpExchange httpExchange) {
         OutputStream outputStream = httpExchange.getResponseBody();
-        String response = "Response to GET method with URI: " + httpExchange.getRequestURI();
+        final int fileId = Integer.parseInt(httpExchange.getRequestURI().toString().split("/")[2]);
         try {
-            httpExchange.sendResponseHeaders(200, response.length());
-            outputStream.write(response.getBytes());
-            outputStream.flush();
-        } catch (IOException ex) {
-            System.out.println(this.toString() + ": " + ex.getMessage());
-        }
-    }
-
-    private void handleHeadRequest(HttpExchange httpExchange) {
-        try {
-            httpExchange.sendResponseHeaders(501, 0);
-            OutputStream outputStream = httpExchange.getResponseBody();
-            outputStream.flush();
-        } catch (IOException ex) {
-            System.out.println(this.toString() + ": " + ex.getMessage());
-        }
-    }
-
-    private void handlePostRequest(HttpExchange httpExchange) {
-        InputStream inputStream = httpExchange.getRequestBody();
-        OutputStream outputStream = httpExchange.getResponseBody();
-        try {
-            String fileData = new String(inputStream.readAllBytes());
-            String fileName = httpExchange.getRequestURI().toString().split("/")[2];
-            int fileID = addFileToStorage(fileName, fileData);
-            httpExchange.sendResponseHeaders(200, String.valueOf(fileID).length());
-            outputStream.write(String.valueOf(fileID).getBytes());
-            outputStream.flush();
+            boolean wasDeleted = deleteFileFromStorage(fileId);
+            if (wasDeleted) {
+                httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+            } else {
+                final String FILE_DELETE_MESSAGE = "File could not be deleted: " + fileId;
+                httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, FILE_DELETE_MESSAGE.length());
+                outputStream.write(FILE_DELETE_MESSAGE.getBytes());
+                outputStream.flush();
+            }
         } catch (Exception ex) {
             System.out.println(this.toString() + ": " + ex.getMessage());
             try {
-                httpExchange.sendResponseHeaders(400, ex.getMessage().length());
+                httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, ex.getMessage().length());
                 outputStream.write(ex.getMessage().getBytes());
                 outputStream.flush();
             } catch (IOException io) {
@@ -97,14 +68,91 @@ public class ApiHttpHandler implements HttpHandler {
         }
     }
 
-    public int addFileToStorage(String fileName, String fileData) throws FileAlreadyExistsException, IOException {
+    private boolean deleteFileFromStorage(int fileId) throws IOException {
+        File fileObj = filesMap.get(fileId);
+        if (fileObj != null && fileObj.exists()) {
+            boolean wasDeleted = fileObj.delete();
+            if (wasDeleted) {
+                filesMap.remove(fileId);
+            }
+            return wasDeleted;
+        } else {
+            throw new FileNotFoundException("No file with such ID: " + fileId);
+        }
+    }
+
+    private void handleGetRequest(HttpExchange httpExchange) {
+        OutputStream outputStream = httpExchange.getResponseBody();
+        final String response = "Response to GET method with URI: " + httpExchange.getRequestURI();
+        try {
+            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, response.length());
+            outputStream.write(response.getBytes());
+            outputStream.flush();
+        } catch (IOException ex) {
+            System.out.println(this.toString() + ": " + ex.getMessage());
+        }
+    }
+
+    private void handleHeadRequest(HttpExchange httpExchange) {
+        final int fileId = Integer.parseInt(httpExchange.getRequestURI().toString().split("/")[2]);
+        OutputStream outputStream = httpExchange.getResponseBody();
+        try {
+            final FileData fileData = getFileData(fileId);
+            httpExchange.getResponseHeaders().add("FileName", fileData.getFileName());
+            httpExchange.getResponseHeaders().add("FileSize", String.valueOf(fileData.getFileSize()));
+            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+            outputStream.flush();
+        } catch (FileNotFoundException ex) {
+            System.out.println(ex.getMessage());
+            try {
+                httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                outputStream.flush();
+            } catch (IOException exception) {
+                System.out.println(ex.getMessage());
+            }
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    private FileData getFileData(int fileId) throws FileNotFoundException {
+        File fileObj = filesMap.get(fileId);
+        if (fileObj != null && fileObj.exists()) {
+            return new FileData(fileObj.getName(), fileObj.length());
+        } else {
+            throw new FileNotFoundException("No file with such ID: "+ fileId);
+        }
+    }
+
+    private void handlePostRequest(HttpExchange httpExchange) {
+        InputStream inputStream = httpExchange.getRequestBody();
+        OutputStream outputStream = httpExchange.getResponseBody();
+        try {
+            byte[] fileData = inputStream.readAllBytes();
+            String fileName = httpExchange.getRequestURI().toString().split("/")[2];
+            int fileID = addFileToStorage(fileName, fileData);
+            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, String.valueOf(fileID).length());
+            outputStream.write(String.valueOf(fileID).getBytes());
+            outputStream.flush();
+        } catch (Exception ex) {
+            try {
+                httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, ex.getMessage().length());
+                outputStream.write(ex.getMessage().getBytes());
+                outputStream.flush();
+            } catch (IOException io) {
+                System.out.println(this.toString() + ": " + io.getMessage());
+            }
+        }
+    }
+
+    public int addFileToStorage(String fileName, byte[] fileData) throws IOException {
         File fileObj = new File(FILES_FOLDER_NAME + fileName);
         if (fileObj.exists()) {
             throw new FileAlreadyExistsException("File already exists: " + fileName);
         } else {
             boolean wasCreated = fileObj.createNewFile();
             if (wasCreated) {
-                FileWriter fileWriter = new FileWriter(fileObj);
+                FileOutputStream fileWriter = new FileOutputStream(fileObj);
                 fileWriter.write(fileData);
                 fileWriter.flush();
                 fileWriter.close();
