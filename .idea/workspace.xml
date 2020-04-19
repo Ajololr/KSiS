@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="Lab 2 client" />
+      <artifact name="Lab 2 server" />
+    </artifacts-to-build>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="0ab0758d-df5c-44fb-8e1b-fbde31d79772" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="lab-2" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1Zf3VWAmKqPC3JcHZmkqbS12Ye8" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="GenerateAntBuildDialog.backupFiles" value="true" />
+    <property name="GenerateAntBuildDialog.enableUiFormCompile" value="true" />
+    <property name="GenerateAntBuildDialog.forceTargetJdk" value="true" />
+    <property name="GenerateAntBuildDialog.outputFileNameProperty" value="lab-2" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="restartRequiresConfirmation" value="false" />
+  </component>
+  <component name="RunManager" selected="Application.Server">
+    <configuration name="Client" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Client.Client" />
+      <module name="lab-2" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Client.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Server" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Server.Server" />
+      <module name="lab-2" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Server.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Client.jar" type="JarApplication" temporary="true">
+      <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/Lab_2_client/lab-2.jar" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method v="2">
+        <option name="BuildArtifacts" enabled="true">
+          <artifact name="Lab 2 client" />
+          <artifact name="Lab 2 server" />
+        </option>
+      </method>
+    </configuration>
+    <configuration name="Server.jar" type="JarApplication" temporary="true">
+      <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/Lab_2_server/lab-2.jar" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method v="2">
+        <option name="BuildArtifacts" enabled="true">
+          <artifact name="Lab 2 client" />
+          <artifact name="Lab 2 server" />
+        </option>
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.Server" />
+      <item itemvalue="Application.Client" />
+      <item itemvalue="JAR Application.Client.jar" />
+      <item itemvalue="JAR Application.Server.jar" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Client" />
+        <item itemvalue="JAR Application.Client.jar" />
+        <item itemvalue="JAR Application.Server.jar" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0ab0758d-df5c-44fb-8e1b-fbde31d79772" name="Default Changelist" comment="" />
+      <created>1585216344724</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1585216344724</updated>
+      <workItem from="1585216346479" duration="25632000" />
+      <workItem from="1585254263523" duration="2375000" />
+      <workItem from="1585300249895" duration="22528000" />
+      <workItem from="1585334704363" duration="1822000" />
+      <workItem from="1585350492382" duration="3710000" />
+      <workItem from="1585354537698" duration="83000" />
+      <workItem from="1585567339377" duration="527000" />
+      <workItem from="1585635045770" duration="5795000" />
+      <workItem from="1585655609950" duration="14220000" />
+      <workItem from="1586253459781" duration="767000" />
+      <workItem from="1587130818441" duration="428000" />
+      <workItem from="1587203429992" duration="57000" />
+      <workItem from="1587296768743" duration="228000" />
+    </task>
+    <task id="LOCAL-00001" summary="feat: add UDP server socket">
+      <created>1585218686754</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1585218686754</updated>
+    </task>
+    <task id="LOCAL-00002" summary="feat: add TCP server socket">
+      <created>1585221057973</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1585221057973</updated>
+    </task>
+    <task id="LOCAL-00003" summary="feat: add server logic">
+      <created>1585221158542</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1585221158542</updated>
+    </task>
+    <task id="LOCAL-00004" summary="refactor: change package name">
+      <created>1585221196881</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1585221196881</updated>
+    </task>
+    <task id="LOCAL-00005" summary="feat: add client logic">
+      <created>1585228757221</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1585228757221</updated>
+    </task>
+    <task id="LOCAL-00006" summary="fix: change server port sending">
+      <created>1585228792923</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1585228792923</updated>
+    </task>
+    <task id="LOCAL-00007" summary="feat: add messages history">
+      <created>1585234236167</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1585234236167</updated>
+    </task>
+    <task id="LOCAL-00008" summary="feat: add login form">
+      <created>1585255154488</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1585255154488</updated>
+    </task>
+    <task id="LOCAL-00009" summary="feat: add chat window">
+      <created>1585255179669</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1585255179670</updated>
+    </task>
+    <task id="LOCAL-00010" summary="refactor: change console with GUI">
+      <created>1585255227559</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1585255227559</updated>
+    </task>
+    <task id="LOCAL-00011" summary="feat: add chat selection">
+      <created>1585354617931</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1585354617931</updated>
+    </task>
+    <task id="LOCAL-00012" summary="refactor: general code refactor">
+      <created>1585641556848</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1585641556848</updated>
+    </task>
+    <task id="LOCAL-00013" summary="refactor: general code refactor">
+      <created>1585666376648</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1585666376648</updated>
+    </task>
+    <task id="LOCAL-00014" summary="fix: add cyrillic symbols support">
+      <created>1585671332633</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1585671332633</updated>
+    </task>
+    <task id="LOCAL-00015" summary="feat: add chat list notifications on unread messages">
+      <created>1585674539811</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1585674539811</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="feat: add UDP server socket" />
+    <MESSAGE value="feat: add TCP server socket" />
+    <MESSAGE value="feat: add server logic" />
+    <MESSAGE value="refactor: change package name" />
+    <MESSAGE value="feat: add client logic" />
+    <MESSAGE value="fix: change server port sending" />
+    <MESSAGE value="feat: add messages history" />
+    <MESSAGE value="feat: add login form" />
+    <MESSAGE value="feat: add chat window" />
+    <MESSAGE value="refactor: change console with GUI" />
+    <MESSAGE value="feat: add chat selection" />
+    <MESSAGE value="refactor: general code refactor" />
+    <MESSAGE value="fix: add cyrillic symbols support" />
+    <MESSAGE value="feat: add chat list notifications on unread messages" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: add chat list notifications on unread messages" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="548" y="216" key="#BuildArtifactsBeforeRunChooser" timestamp="1585657440292">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="548" y="216" key="#BuildArtifactsBeforeRunChooser/0.0.1536.824@0.0.1536.824" timestamp="1585657440292" />
+    <state x="433" y="53" key="#Client_(1)" timestamp="1585655657952">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="433" y="53" key="#Client_(1)/0.0.1536.824@0.0.1536.824" timestamp="1585655657952" />
+    <state x="361" y="70" key="#Notifications" timestamp="1587296910138">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="361" y="70" key="#Notifications/0.0.1536.824@0.0.1536.824" timestamp="1587296910138" />
+    <state x="361" y="70" key="#Project_Structure" timestamp="1585216354068">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="361" y="70" key="#Project_Structure/0.0.1536.824@0.0.1536.824" timestamp="1585216354068" />
+    <state x="485" y="54" key="#Server" timestamp="1587297222504">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="485" y="54" key="#Server/0.0.1536.824@0.0.1536.824" timestamp="1587297222504" />
+    <state x="223" y="66" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1585657878647">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="223" y="66" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1585657878647" />
+    <state x="574" y="121" key="#com.intellij.ide.util.MemberChooser" timestamp="1585319226402">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="574" y="121" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1585319226402" />
+    <state x="499" y="195" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1585658062987">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="499" y="195" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1536.824@0.0.1536.824" timestamp="1585658062987" />
+    <state x="499" y="158" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog" timestamp="1585224817208">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="499" y="158" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1536.824@0.0.1536.824" timestamp="1585224817208" />
+    <state x="393" y="8" key="CommitChangelistDialog2" timestamp="1585674539250">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="393" y="8" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1585674539250" />
+    <state width="392" height="466" key="DebuggerActiveHint" timestamp="1585335674393">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="392" height="466" key="DebuggerActiveHint/0.0.1536.824@0.0.1536.824" timestamp="1585335674393" />
+    <state x="-171" y="94" width="1228" height="689" key="DiffContextDialog" timestamp="1587296989040">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="-171" y="94" width="1228" height="689" key="DiffContextDialog/0.0.1536.824@0.0.1536.824" timestamp="1587296989040" />
+    <state x="549" y="166" key="FileChooserDialogImpl" timestamp="1587296996808">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="549" y="166" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1587296996808" />
+    <state width="1493" height="206" key="GridCell.Tab.0.bottom" timestamp="1587131246157">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="206" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1587131246157" />
+    <state width="1493" height="206" key="GridCell.Tab.0.center" timestamp="1587131246157">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="206" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1587131246157" />
+    <state width="1493" height="206" key="GridCell.Tab.0.left" timestamp="1587131246157">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="206" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1587131246157" />
+    <state width="1493" height="206" key="GridCell.Tab.0.right" timestamp="1587131246157">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="206" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1587131246157" />
+    <state width="1493" height="233" key="GridCell.Tab.1.bottom" timestamp="1585676482008">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="233" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1585676482008" />
+    <state width="1493" height="233" key="GridCell.Tab.1.center" timestamp="1585676482008">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="233" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1585676482008" />
+    <state width="1493" height="233" key="GridCell.Tab.1.left" timestamp="1585676482008">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="233" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1585676482008" />
+    <state width="1493" height="233" key="GridCell.Tab.1.right" timestamp="1585676482008">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="233" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1585676482008" />
+    <state x="249" y="0" key="SettingsEditor" timestamp="1585666510267">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="249" y="0" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1585666510267" />
+    <state x="93" y="93" width="1350" height="638" key="ShowDiffWithBranchDialog" timestamp="1587296989040">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="93" y="93" width="1350" height="638" key="ShowDiffWithBranchDialog/0.0.1536.824@0.0.1536.824" timestamp="1587296989040" />
+    <state x="309" y="85" key="Vcs.Push.Dialog.v2" timestamp="1585674544901">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="309" y="85" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1585674544901" />
+    <state x="465" y="235" key="com.intellij.ide.util.TipDialog" timestamp="1586256431931">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="465" y="235" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1586256431931" />
+    <state x="462" y="17" width="611" height="789" key="find.popup" timestamp="1585657162984">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="462" y="17" width="611" height="789" key="find.popup/0.0.1536.824@0.0.1536.824" timestamp="1585657162984" />
+    <state x="550" y="124" key="git4idea.branch.GitSmartOperationDialog" timestamp="1587296894226">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="550" y="124" key="git4idea.branch.GitSmartOperationDialog/0.0.1536.824@0.0.1536.824" timestamp="1587296894226" />
+    <state x="425" y="187" key="run.anything.popup" timestamp="1585636729295">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="425" y="187" key="run.anything.popup/0.0.1536.824@0.0.1536.824" timestamp="1585636729295" />
+    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1585657165822">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1585657165822" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Server/TCPsocket/TCPsocket.java</url>
+          <line>51</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
