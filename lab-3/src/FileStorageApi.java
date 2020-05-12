@@ -6,7 +6,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
 public class FileStorageApi {
-    private static final int API_PORT = 8888;
+    private static final int API_PORT = 7777;
     private HttpServer server;
 
     public FileStorageApi() {

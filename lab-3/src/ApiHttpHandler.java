@@ -82,14 +82,21 @@ public class ApiHttpHandler implements HttpHandler {
     }
 
     private void handleGetRequest(HttpExchange httpExchange) {
+        final int fileId = Integer.parseInt(httpExchange.getRequestURI().toString().split("/")[2]);
         OutputStream outputStream = httpExchange.getResponseBody();
-        final String response = "Response to GET method with URI: " + httpExchange.getRequestURI();
         try {
-            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, response.length());
-            outputStream.write(response.getBytes());
+            byte[] fileData = getFileFromStorage(fileId);
+            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, fileData.length);
+            outputStream.write(fileData);
             outputStream.flush();
-        } catch (IOException ex) {
-            System.out.println(this.toString() + ": " + ex.getMessage());
+        } catch (Exception ex) {
+            try {
+                httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, ex.getMessage().length());
+                outputStream.write(ex.getMessage().getBytes());
+                outputStream.flush();
+            } catch (IOException io) {
+                System.out.println(this.toString() + ": " + io.getMessage());
+            }
         }
     }
 
@@ -112,6 +119,16 @@ public class ApiHttpHandler implements HttpHandler {
             }
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
+        }
+    }
+
+    private byte[] getFileFromStorage(int fileId) throws IOException {
+        File fileObj = filesMap.get(fileId);
+        if (fileObj != null && fileObj.exists()) {
+            FileInputStream fileInputStream = new FileInputStream(fileObj);
+            return fileInputStream.readAllBytes();
+        } else {
+            throw new FileNotFoundException("No file with such ID: "+ fileId);
         }
     }
 
