@@ -1,6 +1,7 @@
 package Client.ChatWindow;
 
 import Client.ClientSocket.*;
+import Client.FileStorageManager.FileStorageManager;
 import Client.FileStorageManager.UniqueFile;
 import javafx.scene.layout.GridPane;
 
@@ -213,6 +214,8 @@ public class ChatWindow extends Frame implements WindowListener {
                 File file = new File(directory + filename);
                 add(createFileControlElement(file));
                 filesList.add(new UniqueFile(file.getName(), 25));
+                FileStorageManager fileStorageManager = new FileStorageManager();
+                fileStorageManager.putFileToStorage(file);
                 updateLayout();
             }
         });
