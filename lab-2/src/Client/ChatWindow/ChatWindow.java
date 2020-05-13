@@ -1,127 +1,89 @@
 package Client.ChatWindow;
 
 import Client.ClientSocket.*;
+import Client.FileStorageManager.UniqueFile;
+import javafx.scene.layout.GridPane;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
+import javax.swing.text.JTextComponent;
+import javax.swing.text.ParagraphView;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class ChatWindow extends Frame implements WindowListener {
     public LinkedList<ChatMessages> chatsMessagesList = new LinkedList<>();
+    public LinkedList<UniqueFile> filesList = new LinkedList<>();
     public Button sendButton;
     public Button addFileButton;
     public List chatsList;
     public TextField msgField;
-    public TextArea chatArea;
     private ClientSocket client;
-    private Container newChatArea;
+    private JScrollPane scrollPane = new JScrollPane();
+    final ListPanel chatArea = new ListPanel();
     private int currentChatIndex;
 
-    public class ListPanel extends JPanel
-    {
-        private static final long serialVersionUID = 1L;
-        private JPanel fillerPanel;
-        private ArrayList<JPanel> panels;
-
-        public ListPanel(java.util.List<JPanel> panels, int height)
-        {
-            this(panels, height, new Insets(2, 0, 2, 0));
-        }
-
-        public ListPanel(java.util.List<JPanel> panels, int height, Insets insets)
-        {
-            this();
-            for (JPanel panel : panels)
-                addPanel(panel, height, insets);
-        }
-
-        public ListPanel()
-        {
-            super();
-            this.fillerPanel = new JPanel();
-            this.fillerPanel.setMinimumSize(new Dimension(0, 0));
-            this.panels = new ArrayList<JPanel>();
-            setLayout(new GridBagLayout());
-        }
-
-        public void addPanel(JPanel p, int height)
-        {
-            addPanel(p, height, new Insets(2, 0, 2, 0));
-        }
-
-        public void addPanel(JPanel p, int height, Insets insets)
-        {
-            super.remove(fillerPanel);
-            GridBagConstraints gbc = new GridBagConstraints();
-            gbc.gridx = 0;
-            gbc.gridy = getComponentCount();
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-            gbc.anchor = GridBagConstraints.PAGE_START;
-            gbc.ipady = height;
-            gbc.insets = insets;
-            gbc.weightx = 1.0;
-            panels.add(p);
-            add(p, gbc);
-            gbc = new GridBagConstraints();
-            gbc.gridx = 0;
-            gbc.gridy = getComponentCount();
-            gbc.fill = GridBagConstraints.VERTICAL;
-            gbc.weighty = 1.0;
-            add(fillerPanel, gbc);
-            revalidate();
-            invalidate();
-            repaint();
-        }
-
-        public void removePanel(JPanel p)
-        {
-            removePanel(panels.indexOf(p));
-        }
-
-        public void removePanel(int i)
-        {
-            super.remove(i);
-            panels.remove(i);
-            revalidate();
-            invalidate();
-            repaint();
-        }
-
-        public ArrayList<JPanel> getPanels()
-        {
-            return this.panels;
-        }
-
-        public JPanel getRandomJPanel()
-        {
-            JPanel panel = new JPanel();
-            panel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-            panel.add(new JLabel("This is a randomly sized JPanel"));
-            panel.setBackground(new Color(new Random().nextFloat(), new Random().nextFloat(), new Random().nextFloat()));
-            return panel;
-        }
-    }
-
-    private class FileMessage {
-        public Container controlPane;
-        public Label fileNameLabel;
-    }
-
-    private class ChatMessage {
-        public Container controlPane;
-        public Button downloadButton;
-        public Label mes;
+    private static class Message {
         public String message;
-        public FileMessage[] filesArray;
+        public LinkedList<UniqueFile> filesList;
+
+        public JPanel getMessagePanel() {
+            JPanel controlPane = new JPanel();
+            controlPane.setLayout(new BoxLayout(controlPane, BoxLayout.Y_AXIS));
+            JTextArea textArea = new JTextArea(1, 30);
+            textArea.setEditable(false);
+            textArea.setLineWrap(true);
+            textArea.append(message);
+            controlPane.add(textArea);
+            if (!filesList.isEmpty()) {
+                for (UniqueFile uniqueFile: filesList) {
+                    JPanel buttonPanel = new JPanel();
+                    Label fileNameLabel  = new Label(uniqueFile.getOriginalName());
+                    Button downloadButton = new Button("Download");
+                    downloadButton.addActionListener(actionEvent -> {
+                    });
+                    int rgbColor = (int)(Math.random() * 0xFFFFFF);
+                    buttonPanel.setBackground(new Color(rgbColor));
+                    fileNameLabel.setForeground(new Color(rgbColor ^ 0xFFFFFF));
+                    buttonPanel.add(fileNameLabel);
+                    buttonPanel.add(downloadButton);
+                    controlPane.add(buttonPanel);
+                }
+            }
+            return controlPane;
+        }
+
+        public Message(String msg, LinkedList<UniqueFile> filesList) {
+            message = msg;
+            if (filesList == null) {
+                this.filesList = new LinkedList<>();
+            } else  {
+                this.filesList = filesList;
+            }
+        }
+    }
+
+    private static class ChatMessages {
+        public String chatName;
+        public LinkedList<Message> messagesList;
+        public int unreadMessagesCount;
+
+        private ChatMessages(String chatName) {
+            this.chatName = chatName;
+            messagesList = new LinkedList<>();
+            unreadMessagesCount = 0;
+        }
     }
 
     private Panel createFileControlElement(File file) {
@@ -145,44 +107,63 @@ public class ChatWindow extends Frame implements WindowListener {
         return controlPane;
     }
 
-    private JPanel createPanel() {
-        JPanel controlPane;
-        Button deleteButton;
-        Label fileNameLabel;
-        controlPane = new JPanel();
-        int rgbColor = (int)(Math.random() * 0xFFFFFF);
-        controlPane.setBackground(new Color(rgbColor));
-        controlPane.setLayout(new FlowLayout());
-        deleteButton = new Button("Delete file");
-        deleteButton.addActionListener(actionEvent -> {
-            remove(controlPane);
-            updateLayout();
-        });
-        fileNameLabel = new Label("test");
-        fileNameLabel.setForeground(new Color(rgbColor ^ 0xFFFFFF));
-        controlPane.add(fileNameLabel);
-        controlPane.add(deleteButton);
-        controlPane.setSize(250,50);
-        controlPane.setVisible(false);
-        controlPane.setVisible(true);
-        return controlPane;
+    private void updateLayout() {
+        revalidate();
+        invalidate();
+        repaint();
     }
 
-    private class ChatMessages {
-        public String chatName;
-        public LinkedList<String> messagesList;
-        public int unreadMessagesCount;
-
-        private ChatMessages(String chatName) {
-            this.chatName = chatName;
-            messagesList = new LinkedList();
-            unreadMessagesCount = 0;
+    public void addMsg(String text, LinkedList<UniqueFile> files, int index) {
+        Message message = new Message(text, files);
+        chatsMessagesList.get(index).messagesList.add(message);
+        if (currentChatIndex == index) {
+            chatArea.addPanel(message.getMessagePanel(), 100);
+        } else {
+            chatsList.remove(index);
+            chatsList.add(chatsMessagesList.get(index).chatName + " (" + (++chatsMessagesList.get(index).unreadMessagesCount) + ")", index);
         }
     }
 
-    private void updateLayout() {
-        this.setVisible(false);
-        this.setVisible(true);
+    public void deleteChat(int index) {
+        if (index == currentChatIndex) {
+            currentChatIndex = 0;
+            chatsList.select(0);
+            scrollPane.removeAll();
+            for (Message msg : chatsMessagesList.get(currentChatIndex).messagesList) {
+                chatArea.addPanel(msg.getMessagePanel(), 100);
+            }
+        }
+        chatsList.remove(index);
+        chatsMessagesList.remove(index);
+    }
+
+    public void addChat(String nickname) {
+        chatsList.add(nickname);
+        chatsMessagesList.add(new ChatMessages(nickname));
+    }
+
+    public LinkedList<UniqueFile> parseFilesString(String filesArray) {
+        if (filesArray.isEmpty()) {
+            return null;
+        }
+        LinkedList<UniqueFile> result = new LinkedList<>();
+        Pattern p = Pattern.compile("[A-z.0-9]+,[-A-z.0-9]+");
+        Matcher m = p.matcher(filesArray);
+        while (m.find()) {
+            String[] data = m.group().split(",");
+            result.add(new UniqueFile(data[0], Integer.parseInt(data[1])));
+        }
+        return result;
+    }
+
+    public String parseFilesList(LinkedList<UniqueFile> uniqueFiles) {
+        String result = "[";
+        for (UniqueFile uniqueFile: uniqueFiles) {
+            result += "{" + uniqueFile.getOriginalName() + "," + uniqueFile.getID() + "}";
+    }
+        result += "]";
+        System.out.println(result);
+        return result;
     }
 
     public ChatWindow(ClientSocket client) {
@@ -194,15 +175,12 @@ public class ChatWindow extends Frame implements WindowListener {
         sendButton = new Button("Send");
         addFileButton = new Button("Add file");
 
-        chatsList = new List(15, false);
+        chatsList = new List(21, false);
         chatsList.add("Global chat");
         chatsList.select(0);
         currentChatIndex = 0;
 
         msgField = new TextField(49);
-
-        chatArea = new TextArea("", 15, 40, TextArea.SCROLLBARS_VERTICAL_ONLY);
-        chatArea.setEditable(false);
 
         chatsList.addActionListener(actionEvent -> {
             currentChatIndex = chatsList.getSelectedIndex();
@@ -210,15 +188,15 @@ public class ChatWindow extends Frame implements WindowListener {
             chatsList.add(chatsMessagesList.get(currentChatIndex).chatName, currentChatIndex);
             chatsList.select(currentChatIndex);
             chatsMessagesList.get(currentChatIndex).unreadMessagesCount = 0;
-            chatArea.setText("");
-            for (String text : chatsMessagesList.get(currentChatIndex).messagesList) {
-                chatArea.append(text);
+            scrollPane.removeAll();
+            for (Message msg : chatsMessagesList.get(currentChatIndex).messagesList) {
+                chatArea.addPanel(msg.getMessagePanel(), 100);
             }
         });
 
         sendButton.addActionListener(actionEvent -> {
             if (!msgField.getText().trim().equals("")) {
-                client.send(msgField.getText().trim(), currentChatIndex);
+                client.send(msgField.getText().trim(), parseFilesList(filesList), currentChatIndex);
                 msgField.setText("");
             }
         });
@@ -234,82 +212,37 @@ public class ChatWindow extends Frame implements WindowListener {
                 System.out.println("You chose " + directory + filename);
                 File file = new File(directory + filename);
                 add(createFileControlElement(file));
+                filesList.add(new UniqueFile(file.getName(), 25));
                 updateLayout();
             }
         });
 
         msgField.addActionListener(actionEvent -> {
             if (!msgField.getText().trim().equals("")) {
-                client.send(msgField.getText().trim(), currentChatIndex);
+                client.send(msgField.getText().trim(), parseFilesList(filesList), currentChatIndex);
                 msgField.setText("");
             }
         });
 
-//        JList<JPanel> panelJList = new JList<JPanel>();
-//        panelJList.add(createPanel());
-//        panelJList.add(createPanel());
-//        panelJList.setVisible(true);
-
-//        JPanel jpAcc = new JPanel();
-//        jpAcc.setSize(300, 300);
-//        JScrollPane scrollPane = new JScrollPane(panelJList);
-//        jpAcc.add(scrollPane, BorderLayout.CENTER);
-//        jpAcc.setVisible(true);
-//        pack();
-//        JScrollPane jScrollPane = new JScrollPane(panelJList);
-//        jScrollPane.setLayout(new ScrollPaneLayout());
-
-        final ListPanel listPanel = new ListPanel();
-        for (int i = 1; i <= 10; i++)
-            listPanel.addPanel(listPanel.getRandomJPanel(), new Random().nextInt(50) + 50);
-
-        JScrollPane scrollPane = new JScrollPane();
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setViewportView(listPanel);
+        scrollPane.setViewportView(chatArea);
 
-        add(chatArea);
+        JPanel panel = new JPanel();
+        panel.setPreferredSize(new Dimension(340, 350));
+        panel.setBackground(Color.CYAN);
+        panel.setLayout(new BorderLayout());
+        panel.add(scrollPane);
+
+        add(panel);
         add(chatsList);
         add(msgField);
         add(sendButton);
         add(addFileButton);
-        JPanel panel = new JPanel();
-        panel.setPreferredSize(new Dimension(300, 300));
-        panel.setBackground(Color.CYAN);
-        panel.setLayout(new BorderLayout());
-        panel.add(scrollPane);
-        add(panel);
 
-        this.setSize(500,400);
+        this.setSize(500,500);
+        updateLayout();
         this.setVisible(true);
         this.setTitle(client.nickname);
-    }
-
-    public void addMsg(String msg, int index) {
-        chatsMessagesList.get(index).messagesList.add(msg);
-        if (currentChatIndex == index) {
-            chatArea.append(msg);
-        } else {
-            chatsList.remove(index);
-            chatsList.add(chatsMessagesList.get(index).chatName + " (" + (++chatsMessagesList.get(index).unreadMessagesCount) + ")", index);
-        }
-    }
-
-    public void deleteChat(int index) {
-        if (index == currentChatIndex) {
-            currentChatIndex = 0;
-            chatsList.select(0);
-            chatArea.setText("");
-            for (String text : chatsMessagesList.get(currentChatIndex).messagesList) {
-                chatArea.append(text);
-            }
-        }
-        chatsList.remove(index);
-        chatsMessagesList.remove(index);
-    }
-
-    public void addChat(String nickname) {
-        chatsList.add(nickname);
-        chatsMessagesList.add(new ChatMessages(nickname));
     }
 
     @Override

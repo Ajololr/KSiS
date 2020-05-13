@@ -37,44 +37,15 @@ public class TCPsocket extends Thread {
         }
     }
 
-    @Override
-    public void run() {
-        try {
-            while (true) {
-                String msg = inputStream.readLine();
-                String[] data = msg.split(" ", 4);
-                int command = Integer.parseInt(data[0]);
-                int sender = Server.serverList.indexOf(this) + 1;
-                int receiver = Integer.parseInt(data[2]);
-                String text = data[3];
-                switch (command) {
-                    case 0:
-                        send(sender, receiver, text, msg);
-                        break;
-                    case 1:
-                        addMember(text, msg);
-                        break;
-                    case 2:
-                        deleteMember(sender, receiver, text);
-                        break;
-                    default:
-                        System.out.println("Unrecognized command" + command);
-                }
-            }
-        } catch (IOException | NullPointerException e) {
-            this.downService();
-        }
-    }
-
-    private void send(int sender, int receiver, String text, String msg) {
+    private void send(int sender, int receiver, String filesArray, String text, String msg) {
         if (receiver == 0) {
             Server.msgList.add(msg);
             for (TCPsocket clientSocket : Server.serverList) {
                 clientSocket.send(msg);
             }
         } else {
-            System.out.println("Server sends " + text + " from " + sender + " to " + receiver);
-            msg = "0 " + sender + " " + receiver + " " + text;
+            System.out.println("Server sends " + filesArray + " " + text + " from " + sender + " to " + receiver);
+            msg = "0 " + sender + " " + receiver + " " + filesArray + " " + text;
             Server.serverList.get(receiver - 1).send(msg);
             if (sender != receiver) {
                 msg = "0 " + receiver + " " + sender + " " + text;
@@ -103,5 +74,36 @@ public class TCPsocket extends Thread {
                 Server.membersList.remove(index);
             }
         } catch (IOException ignored) {}
+    }
+
+    @Override
+    public void run() {
+        try {
+            while (true) {
+                String msg = inputStream.readLine();
+                String[] data = msg.split(" ", 5);
+                int command = Integer.parseInt(data[0]);
+                int sender = Server.serverList.indexOf(this) + 1;
+                int receiver = Integer.parseInt(data[2]);
+                String filesArray = data[3];
+                String text = data[4];
+                System.out.println(msg);
+                switch (command) {
+                    case 0:
+                        send(sender, receiver, filesArray, text, msg);
+                        break;
+                    case 1:
+                        addMember(text, msg);
+                        break;
+                    case 2:
+                        deleteMember(sender, receiver, text);
+                        break;
+                    default:
+                        System.out.println("Unrecognized command" + command);
+                }
+            }
+        } catch (IOException | NullPointerException e) {
+            this.downService();
+        }
     }
 }

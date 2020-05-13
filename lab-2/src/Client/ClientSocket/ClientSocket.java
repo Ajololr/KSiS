@@ -1,11 +1,14 @@
 package Client.ClientSocket;
 
 import Client.ChatWindow.ChatWindow;
+import Client.FileStorageManager.UniqueFile;
+
 import java.io.*;
 import java.net.*;
 import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
 
 public class ClientSocket {
     private static Socket clientSocket;
@@ -19,17 +22,18 @@ public class ClientSocket {
         public void run() {
             try {
                 while (true) {
-                    String[] data = inputStream.readLine().split(" ", 4);
+                    String[] data = inputStream.readLine().split(" ", 5);
                     int command = Integer.parseInt(data[0]);
                     int sender = Integer.parseInt(data[1]);
                     int receiver = Integer.parseInt(data[2]);
-                    String text = data[3];
+                    LinkedList<UniqueFile> filesList = app.parseFilesString(data[3]);
+                    String text = data[4];
                     switch (command) {
                         case 0:
                             if (receiver != 0) {
-                                app.addMsg(text + "\n", sender);
+                                app.addMsg(text, filesList, sender);
                             } else {
-                                app.addMsg(text + "\n", 0);
+                                app.addMsg(text, filesList, 0);
                             }
                             break;
                         case 1:
@@ -48,7 +52,7 @@ public class ClientSocket {
         }
     }
 
-    public void send(String text, int receiver) {
+    public void send(String text, String filesArray, int receiver) {
         Date time;
         String dtime;
         SimpleDateFormat dt1;
@@ -56,7 +60,7 @@ public class ClientSocket {
             time = new Date();
             dt1 = new SimpleDateFormat("HH:mm:ss");
             dtime = dt1.format(time);
-            outputStream.write("0 0 " + receiver + " (" + dtime + ") " + nickname + ": " + text + "\n");
+            outputStream.write("0 0 " + receiver + " " + filesArray + " (" + dtime + ") " + nickname + ": " + text + "\n");
             outputStream.flush();
         } catch (IOException e) {
             downService();
@@ -66,7 +70,7 @@ public class ClientSocket {
     public void addUser(String nickname) {
         try {
             System.out.println("Client sends his name: " + nickname);
-            outputStream.write("1 0 0 " + nickname + "\n");
+            outputStream.write("1 0 0 " + " " + nickname + "\n");
             outputStream.flush();
         } catch (IOException e) {
             downService();

@@ -1,17 +1,14 @@
 package Client.FileStorageManager;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import javax.swing.*;
 
 public class UniqueFile {
     private String originalName;
-    private String uniqueName;
-    private byte[] fileData;
+    private int ID;
 
-    public UniqueFile(String fileName) throws IOException {
+    public UniqueFile(String fileName, int ID){
         originalName = fileName;
-        uniqueName = generateUniqueName();
+        this.ID = ID;
     }
 
     private String generateUniqueName() {
@@ -27,14 +24,6 @@ public class UniqueFile {
         return sb.toString();
     }
 
-    public byte[] getFileData() {
-        return fileData;
-    }
-
-    public void setFileData(byte[] fileData) {
-        this.fileData = fileData;
-    }
-
     public String getOriginalName() {
         return originalName;
     }
@@ -43,11 +32,11 @@ public class UniqueFile {
         this.originalName = originalName;
     }
 
-    public String getUniqueName() {
-        return uniqueName;
+    public int getID() {
+        return ID;
     }
 
-    public void setUniqueName(String uniqueName) {
-        this.uniqueName = uniqueName;
+    public void setID(int ID) {
+        this.ID = ID;
     }
 }
