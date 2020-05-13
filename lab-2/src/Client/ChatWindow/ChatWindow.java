@@ -3,22 +3,12 @@ package Client.ChatWindow;
 import Client.ClientSocket.*;
 import Client.FileStorageManager.FileStorageManager;
 import Client.FileStorageManager.UniqueFile;
-import javafx.scene.layout.GridPane;
-
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
-import javax.swing.text.JTextComponent;
-import javax.swing.text.ParagraphView;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,6 +16,8 @@ import java.util.regex.Pattern;
 public class ChatWindow extends Frame implements WindowListener {
     public LinkedList<ChatMessages> chatsMessagesList = new LinkedList<>();
     public LinkedList<UniqueFile> filesList = new LinkedList<>();
+    private LinkedList<Panel> filesPanelsList = new LinkedList<>();
+    private final FileStorageManager fileStorageManager = new FileStorageManager();
     public Button sendButton;
     public Button addFileButton;
     public List chatsList;
@@ -35,7 +27,7 @@ public class ChatWindow extends Frame implements WindowListener {
     final ListPanel chatArea = new ListPanel();
     private int currentChatIndex;
 
-    private static class Message {
+    private class Message {
         public String message;
         public LinkedList<UniqueFile> filesList;
 
@@ -53,6 +45,7 @@ public class ChatWindow extends Frame implements WindowListener {
                     Label fileNameLabel  = new Label(uniqueFile.getOriginalName());
                     Button downloadButton = new Button("Download");
                     downloadButton.addActionListener(actionEvent -> {
+                        fileStorageManager.getFileFromStorage(uniqueFile);
                     });
                     int rgbColor = (int)(Math.random() * 0xFFFFFF);
                     buttonPanel.setBackground(new Color(rgbColor));
@@ -87,7 +80,15 @@ public class ChatWindow extends Frame implements WindowListener {
         }
     }
 
-    private Panel createFileControlElement(File file) {
+    private void clearFilesForSending() {
+        for (Panel filePanel: filesPanelsList) {
+            this.remove(filePanel);
+        }
+        filesList.clear();
+        filesPanelsList.clear();
+    }
+
+    private Panel createFileControlElement(UniqueFile file) {
         Panel controlPane;
         Button deleteButton;
         Label fileNameLabel;
@@ -97,10 +98,17 @@ public class ChatWindow extends Frame implements WindowListener {
         controlPane.setLayout(new FlowLayout());
         deleteButton = new Button("Delete file");
         deleteButton.addActionListener(actionEvent -> {
+            try {
+                fileStorageManager.deleteFileFromStorage(filesList.get(filesList.indexOf(file)), sendButton);
+            } catch (Exception ex) {
+                System.out.println("File has already been deleted.");
+            }
+            filesPanelsList.remove(controlPane);
+            filesList.remove(file);
             remove(controlPane);
             updateLayout();
         });
-        fileNameLabel = new Label(file.getName());
+        fileNameLabel = new Label(file.getOriginalName());
         fileNameLabel.setForeground(new Color(rgbColor ^ 0xFFFFFF));
         controlPane.add(fileNameLabel);
         controlPane.add(deleteButton);
@@ -189,7 +197,8 @@ public class ChatWindow extends Frame implements WindowListener {
             chatsList.add(chatsMessagesList.get(currentChatIndex).chatName, currentChatIndex);
             chatsList.select(currentChatIndex);
             chatsMessagesList.get(currentChatIndex).unreadMessagesCount = 0;
-            scrollPane.removeAll();
+            chatArea.removeAll();
+            updateLayout();
             for (Message msg : chatsMessagesList.get(currentChatIndex).messagesList) {
                 chatArea.addPanel(msg.getMessagePanel(), 100);
             }
@@ -198,6 +207,7 @@ public class ChatWindow extends Frame implements WindowListener {
         sendButton.addActionListener(actionEvent -> {
             if (!msgField.getText().trim().equals("")) {
                 client.send(msgField.getText().trim(), parseFilesList(filesList), currentChatIndex);
+                clearFilesForSending();
                 msgField.setText("");
             }
         });
@@ -207,22 +217,27 @@ public class ChatWindow extends Frame implements WindowListener {
             fileDialog.setVisible(true);
             String filename = fileDialog.getFile();
             String directory = fileDialog.getDirectory();
-            if (filename == null)
-                System.out.println("You cancelled the choice");
-            else {
+            if (filename != null) {
                 System.out.println("You chose " + directory + filename);
                 File file = new File(directory + filename);
-                add(createFileControlElement(file));
-                filesList.add(new UniqueFile(file.getName(), 25));
-                FileStorageManager fileStorageManager = new FileStorageManager();
-                fileStorageManager.putFileToStorage(file);
-                updateLayout();
+                UniqueFile newFileEntry = new UniqueFile(file.getName());
+                filesList.add(newFileEntry);
+                try {
+                    fileStorageManager.putFileToStorage(file, newFileEntry, sendButton);
+                    Panel filePanel = createFileControlElement(newFileEntry);
+                    filesPanelsList.add(filePanel);
+                    add(filePanel);
+                    updateLayout();
+                } catch (Exception ex) {
+                    System.out.println("Error");
+                }
             }
         });
 
         msgField.addActionListener(actionEvent -> {
             if (!msgField.getText().trim().equals("")) {
                 client.send(msgField.getText().trim(), parseFilesList(filesList), currentChatIndex);
+                clearFilesForSending();
                 msgField.setText("");
             }
         });

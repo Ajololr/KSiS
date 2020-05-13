@@ -1,7 +1,5 @@
 package Client.FileStorageManager;
 
-import javax.swing.*;
-
 public class UniqueFile {
     private String originalName;
     private int ID;
@@ -11,17 +9,8 @@ public class UniqueFile {
         this.ID = ID;
     }
 
-    private String generateUniqueName() {
-        final int N = 20;
-        String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                + "0123456789"
-                + "abcdefghijklmnopqrstuvxyz";
-        StringBuilder sb = new StringBuilder(N);
-        for (int i = 0; i < N; i++) {
-            int index = (int)(AlphaNumericString.length() * Math.random());
-            sb.append(AlphaNumericString.charAt(index));
-        }
-        return sb.toString();
+    public UniqueFile(String fileName){
+        originalName = fileName;
     }
 
     public String getOriginalName() {
