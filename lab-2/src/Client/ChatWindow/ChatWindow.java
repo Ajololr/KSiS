@@ -12,12 +12,12 @@ import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 public class ChatWindow extends Frame implements WindowListener {
     public LinkedList<ChatMessages> chatsMessagesList = new LinkedList<>();
     public LinkedList<UniqueFile> filesList = new LinkedList<>();
     private LinkedList<Panel> filesPanelsList = new LinkedList<>();
     private final FileStorageManager fileStorageManager = new FileStorageManager();
+    private final String[] forbiddenExtensions = {".exe", ".jar"};
     public Button sendButton;
     public Button addFileButton;
     public List chatsList;
@@ -80,12 +80,37 @@ public class ChatWindow extends Frame implements WindowListener {
         }
     }
 
+    private void showErrorMessage(String title, String message) {
+        JOptionPane.showMessageDialog(this,
+                message,
+                title,
+                JOptionPane.ERROR_MESSAGE);
+    }
+
     private void clearFilesForSending() {
         for (Panel filePanel: filesPanelsList) {
             this.remove(filePanel);
         }
         filesList.clear();
         filesPanelsList.clear();
+    }
+
+    private boolean isValidFile(String fileName) {
+        LinkedList<UniqueFile> result = new LinkedList<>();
+        for (String extension : forbiddenExtensions) {
+            Pattern p = Pattern.compile(extension + "$");
+            Matcher m = p.matcher(fileName);
+            if (m.find()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private String correctFileName(String fileName) {
+        Pattern pattern = Pattern.compile(" ");
+        Matcher matcher = pattern.matcher(fileName);
+        return matcher.replaceAll("_");
     }
 
     private Panel createFileControlElement(UniqueFile file) {
@@ -156,7 +181,7 @@ public class ChatWindow extends Frame implements WindowListener {
             return null;
         }
         LinkedList<UniqueFile> result = new LinkedList<>();
-        Pattern p = Pattern.compile("[A-z.0-9]+,[-A-z.0-9]+");
+        Pattern p = Pattern.compile("[A-z.\\-_А-я0-9]+,[-A-z.0-9]+");
         Matcher m = p.matcher(filesArray);
         while (m.find()) {
             String[] data = m.group().split(",");
@@ -175,22 +200,23 @@ public class ChatWindow extends Frame implements WindowListener {
         return result;
     }
 
+    public void sendHandler() {
+        if (!msgField.getText().trim().equals("")) {
+            client.send(msgField.getText().trim(), parseFilesList(filesList), currentChatIndex);
+            clearFilesForSending();
+            msgField.setText("");
+        }
+    }
+
     public ChatWindow(ClientSocket client) {
         addWindowListener(this);
         this.client = client;
         chatsMessagesList.add(new ChatMessages("Global chat"));
         setLayout(new FlowLayout(FlowLayout.LEFT));
 
-        sendButton = new Button("Send");
-        addFileButton = new Button("Add file");
-
         chatsList = new List(21, false);
         chatsList.add("Global chat");
         chatsList.select(0);
-        currentChatIndex = 0;
-
-        msgField = new TextField(49);
-
         chatsList.addActionListener(actionEvent -> {
             currentChatIndex = chatsList.getSelectedIndex();
             chatsList.remove(currentChatIndex);
@@ -203,42 +229,41 @@ public class ChatWindow extends Frame implements WindowListener {
                 chatArea.addPanel(msg.getMessagePanel(), 100);
             }
         });
+        currentChatIndex = 0;
 
-        sendButton.addActionListener(actionEvent -> {
-            if (!msgField.getText().trim().equals("")) {
-                client.send(msgField.getText().trim(), parseFilesList(filesList), currentChatIndex);
-                clearFilesForSending();
-                msgField.setText("");
-            }
+        msgField = new TextField(49);
+        msgField.addActionListener(actionEvent -> {
+            sendHandler();
         });
 
+        sendButton = new Button("Send");
+        sendButton.addActionListener(actionEvent -> {
+            sendHandler();
+        });
+
+        addFileButton = new Button("Add file");
         addFileButton.addActionListener(actionEvent -> {
             FileDialog fileDialog = new FileDialog((Frame) null);
             fileDialog.setVisible(true);
             String filename = fileDialog.getFile();
             String directory = fileDialog.getDirectory();
             if (filename != null) {
-                System.out.println("You chose " + directory + filename);
-                File file = new File(directory + filename);
-                UniqueFile newFileEntry = new UniqueFile(file.getName());
-                filesList.add(newFileEntry);
-                try {
-                    fileStorageManager.putFileToStorage(file, newFileEntry, sendButton);
-                    Panel filePanel = createFileControlElement(newFileEntry);
-                    filesPanelsList.add(filePanel);
-                    add(filePanel);
-                    updateLayout();
-                } catch (Exception ex) {
-                    System.out.println("Error");
+                if (!isValidFile(filename)) {
+                    showErrorMessage("Forbidden extension", "File " + filename +  " with such extension is not allowed.");
+                } else  {
+                    File file = new File(directory + filename);
+                    UniqueFile newFileEntry = new UniqueFile(correctFileName(filename));
+                    filesList.add(newFileEntry);
+                    try {
+                        fileStorageManager.putFileToStorage(file, newFileEntry, sendButton);
+                        Panel filePanel = createFileControlElement(newFileEntry);
+                        filesPanelsList.add(filePanel);
+                        add(filePanel);
+                        updateLayout();
+                    } catch (Exception ex) {
+                        System.out.println("Error");
+                    }
                 }
-            }
-        });
-
-        msgField.addActionListener(actionEvent -> {
-            if (!msgField.getText().trim().equals("")) {
-                client.send(msgField.getText().trim(), parseFilesList(filesList), currentChatIndex);
-                clearFilesForSending();
-                msgField.setText("");
             }
         });
 
