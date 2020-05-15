@@ -1,25 +1,76 @@
 package Client.FileStorageManager;
 
-import javax.imageio.IIOException;
 import java.awt.*;
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.file.FileAlreadyExistsException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 public class FileStorageManager {
     final String API_URL = "http://license.codegear.com:7777/Files/";
+    private final String[] forbiddenExtensions = {".exe", ".jar"};
     private int operationsInProgress = 0;
+    public final int fileSizeLimitMB = 50;
+    public final int totalFileSizeLimitMB = 200;
+    public double totalFileSize = 0;
+
+    public boolean isZip(String fileName) {
+        Pattern pattern = Pattern.compile("\\.zip$");
+        Matcher matcher = pattern.matcher(fileName);
+        if (matcher.find()) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean checkZipFiles(File file) {
+        try(ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file))) {
+            ZipEntry entry;
+            String name;
+            while((entry = zipInputStream.getNextEntry()) != null) {
+                name = entry.getName();
+                if (!isValidFile(name)) {
+                    return false;
+                }
+                zipInputStream.closeEntry();
+            }
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+        return true;
+    }
+
+    public boolean isValidFile(String fileName) {
+        for (String extension : forbiddenExtensions) {
+            Pattern pattern = Pattern.compile(extension + "$");
+            Matcher matcher = pattern.matcher(fileName);
+            if (matcher.find()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isValidFileSize(double size) {
+        return size <= fileSizeLimitMB;
+    }
+
+    public boolean isValidTotalFileSize(double size) {
+        return (totalFileSize + size) <= totalFileSizeLimitMB;
+    }
 
     private boolean isComplete() {
         return operationsInProgress == 0;
     }
 
-    public void deleteFileFromStorage(UniqueFile file, Button sendButton) throws FileNotFoundException {
+    public void deleteFileFromStorage(UniqueFile file, Button sendButton) {
         operationsInProgress++;
         sendButton.setEnabled(false);
         HttpRequest request = HttpRequest.newBuilder()
@@ -69,7 +120,7 @@ public class FileStorageManager {
                 });
     }
 
-    public void putFileToStorage(File file, UniqueFile uniqueFile, Button sendButton) throws FileAlreadyExistsException {
+    public void putFileToStorage(File file, UniqueFile uniqueFile, Button sendButton) {
         operationsInProgress++;
         sendButton.setEnabled(false);
         try {

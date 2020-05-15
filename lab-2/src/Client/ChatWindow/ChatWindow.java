@@ -20,10 +20,6 @@ public class ChatWindow extends Frame implements WindowListener {
     public LinkedList<UniqueFile> filesList = new LinkedList<>();
     private LinkedList<Panel> filesPanelsList = new LinkedList<>();
     private final FileStorageManager fileStorageManager = new FileStorageManager();
-    private final String[] forbiddenExtensions = {".exe", ".jar"};
-    private final int fileSizeLimitMB = 50;
-    private final int totalFileSizeLimitMB = 200;
-    private double totalFileSize = 0;
     public Button sendButton;
     public Button addFileButton;
     public List chatsList;
@@ -88,9 +84,9 @@ public class ChatWindow extends Frame implements WindowListener {
 
     private void showErrorMessage(String title, String message) {
         JOptionPane.showMessageDialog(this,
-                message,
-                title,
-                JOptionPane.ERROR_MESSAGE);
+            message,
+            title,
+            JOptionPane.ERROR_MESSAGE);
     }
 
     private void clearFilesForSending() {
@@ -99,53 +95,7 @@ public class ChatWindow extends Frame implements WindowListener {
         }
         filesList.clear();
         filesPanelsList.clear();
-        totalFileSize = 0;
-    }
-
-    private boolean isZip(String fileName) {
-        Pattern p = Pattern.compile("\\.zip$");
-        Matcher m = p.matcher(fileName);
-        if (m.find()) {
-            return true;
-        }
-        return false;
-    }
-
-    private boolean checkZipFiles(File file) {
-        try(ZipInputStream zin = new ZipInputStream(new FileInputStream(file))) {
-            ZipEntry entry;
-            String name;
-            while((entry = zin.getNextEntry()) != null) {
-                name = entry.getName();
-                if (!isValidFile(name)) {
-                    return false;
-                }
-                zin.closeEntry();
-            }
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-        }
-        return true;
-    }
-
-    private boolean isValidFile(String fileName) {
-        LinkedList<UniqueFile> result = new LinkedList<>();
-        for (String extension : forbiddenExtensions) {
-            Pattern p = Pattern.compile(extension + "$");
-            Matcher m = p.matcher(fileName);
-            if (m.find()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private boolean isValidFileSize(double size) {
-        return size <= fileSizeLimitMB;
-    }
-
-    private boolean isValidTotalFileSize(double size) {
-        return (totalFileSize + size) <= totalFileSizeLimitMB;
+        fileStorageManager.totalFileSize = 0;
     }
 
     private String correctFileName(String fileName) {
@@ -171,7 +121,7 @@ public class ChatWindow extends Frame implements WindowListener {
             }
             filesPanelsList.remove(controlPane);
             filesList.remove(file);
-            totalFileSize =- fileSize;
+            fileStorageManager.totalFileSize =- fileSize;
             remove(controlPane);
             updateLayout();
         });
@@ -233,13 +183,13 @@ public class ChatWindow extends Frame implements WindowListener {
     }
 
     public String parseFilesList(LinkedList<UniqueFile> uniqueFiles) {
-        String result = "[";
+        StringBuilder result = new StringBuilder("[");
         for (UniqueFile uniqueFile: uniqueFiles) {
-            result += "{" + uniqueFile.getOriginalName() + "," + uniqueFile.getID() + "}";
+            result.append("{").append(uniqueFile.getOriginalName()).append(",").append(uniqueFile.getID()).append("}");
     }
-        result += "]";
+        result.append("]");
         System.out.println(result);
-        return result;
+        return result.toString();
     }
 
     public void sendHandler() {
@@ -292,16 +242,16 @@ public class ChatWindow extends Frame implements WindowListener {
             if (filename != null) {
                 File file = new File(directory + filename);
                 double fileSize = file.length() / 1048576.0;
-                if (!isValidFile(filename)) {
+                if (!fileStorageManager.isValidFile(filename)) {
                     showErrorMessage("Forbidden extension", "File " + filename +  " with such extension is not allowed.");
-                } else if (!isValidFileSize(fileSize)) {
-                    showErrorMessage("Maximum file size", "File " + file.getName() + " exceeds maximum file size limit (" + fileSizeLimitMB + ").");
-                } else if (!isValidTotalFileSize(fileSize)) {
-                    showErrorMessage("Maximum total file size", "Adding file " + file.getName() + " exceeds maximum file size limit ( " + totalFileSizeLimitMB + " ) per message.");
-                } else if (isZip(filename) && !checkZipFiles(file)) {
+                } else if (!fileStorageManager.isValidFileSize(fileSize)) {
+                    showErrorMessage("Maximum file size", "File " + file.getName() + " exceeds maximum file size limit (" + fileStorageManager.fileSizeLimitMB + ").");
+                } else if (!fileStorageManager.isValidTotalFileSize(fileSize)) {
+                    showErrorMessage("Maximum total file size", "Adding file " + file.getName() + " exceeds maximum file size limit ( " + fileStorageManager.totalFileSizeLimitMB + " ) per message.");
+                } else if (fileStorageManager.isZip(filename) && !fileStorageManager.checkZipFiles(file)) {
                     showErrorMessage("Wrong zip", "Zip file " + file.getName() + " contains files with forbidden extensions.");
                 } else {
-                    totalFileSize += fileSize;
+                    fileStorageManager.totalFileSize += fileSize;
                     UniqueFile newFileEntry = new UniqueFile(correctFileName(filename));
                     filesList.add(newFileEntry);
                     try {
@@ -332,7 +282,7 @@ public class ChatWindow extends Frame implements WindowListener {
         add(sendButton);
         add(addFileButton);
 
-        this.setSize(500,500);
+        this.setSize(500,600);
         updateLayout();
         this.setVisible(true);
         this.setTitle(client.nickname);
