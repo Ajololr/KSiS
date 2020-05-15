@@ -8,39 +8,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0ab0758d-df5c-44fb-8e1b-fbde31d79772" name="Default Changelist" comment="refactor: delete idea">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab-1/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab-1/.idea/.name" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab-1/.idea/artifacts/Lab_2_client.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab-1/.idea/artifacts/Lab_2_server.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab-1/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab-1/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab-1/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab-1/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab-1/lab-2.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab-1/out/artifacts/Lab_2_client/lab-2.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab-1/out/artifacts/Lab_2_server/lab-2.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab-1/out/production/lab-2/Client/ChatWindow/ChatWindow$ChatMessages.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab-1/out/production/lab-2/Client/ChatWindow/ChatWindow.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab-1/out/production/lab-2/Client/Client.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab-1/out/production/lab-2/Client/ClientSocket/ClientSocket$Reader.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab-1/out/production/lab-2/Client/ClientSocket/ClientSocket.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab-1/out/production/lab-2/Client/LoginWindow/LoginWindow.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab-1/out/production/lab-2/Client/META-INF/MANIFEST.MF" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab-1/out/production/lab-2/Server/META-INF/MANIFEST.MF" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab-1/out/production/lab-2/Server/Server.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab-1/out/production/lab-2/Server/TCPsocket/TCPsocket.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab-1/out/production/lab-2/Server/UDPsocket/UDPsocket.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab-1/src/Client/ChatWindow/ChatWindow.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab-1/src/Client/Client.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab-1/src/Client/ClientSocket/ClientSocket.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab-1/src/Client/LoginWindow/LoginWindow.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab-1/src/Client/META-INF/MANIFEST.MF" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab-1/src/Server/META-INF/MANIFEST.MF" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab-1/src/Server/Server.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab-1/src/Server/TCPsocket/TCPsocket.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lab-1/src/Server/UDPsocket/UDPsocket.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab-3/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab-3/.idea/vcs.xml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -185,6 +154,7 @@
       <workItem from="1587297517660" duration="599000" />
       <workItem from="1587375672058" duration="1888000" />
       <workItem from="1588521608471" duration="9000" />
+      <workItem from="1589551183139" duration="39000" />
     </task>
     <task id="LOCAL-00001" summary="feat: add UDP server socket">
       <created>1585218686754</created>
@@ -375,10 +345,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="-171" y="94" width="1228" height="689" key="DiffContextDialog/0.0.1536.824@0.0.1536.824" timestamp="1587296989040" />
-    <state x="549" y="166" key="FileChooserDialogImpl" timestamp="1588521617192">
+    <state x="549" y="166" key="FileChooserDialogImpl" timestamp="1589551221976">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="549" y="166" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1588521617192" />
+    <state x="549" y="166" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1589551221976" />
     <state width="1493" height="206" key="GridCell.Tab.0.bottom" timestamp="1587131246157">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
