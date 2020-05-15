@@ -8,9 +8,12 @@ import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 public class ChatWindow extends Frame implements WindowListener {
     public LinkedList<ChatMessages> chatsMessagesList = new LinkedList<>();
@@ -18,6 +21,9 @@ public class ChatWindow extends Frame implements WindowListener {
     private LinkedList<Panel> filesPanelsList = new LinkedList<>();
     private final FileStorageManager fileStorageManager = new FileStorageManager();
     private final String[] forbiddenExtensions = {".exe", ".jar"};
+    private final int fileSizeLimitMB = 50;
+    private final int totalFileSizeLimitMB = 200;
+    private double totalFileSize = 0;
     public Button sendButton;
     public Button addFileButton;
     public List chatsList;
@@ -93,6 +99,33 @@ public class ChatWindow extends Frame implements WindowListener {
         }
         filesList.clear();
         filesPanelsList.clear();
+        totalFileSize = 0;
+    }
+
+    private boolean isZip(String fileName) {
+        Pattern p = Pattern.compile("\\.zip$");
+        Matcher m = p.matcher(fileName);
+        if (m.find()) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkZipFiles(File file) {
+        try(ZipInputStream zin = new ZipInputStream(new FileInputStream(file))) {
+            ZipEntry entry;
+            String name;
+            while((entry = zin.getNextEntry()) != null) {
+                name = entry.getName();
+                if (!isValidFile(name)) {
+                    return false;
+                }
+                zin.closeEntry();
+            }
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+        return true;
     }
 
     private boolean isValidFile(String fileName) {
@@ -107,13 +140,21 @@ public class ChatWindow extends Frame implements WindowListener {
         return true;
     }
 
+    private boolean isValidFileSize(double size) {
+        return size <= fileSizeLimitMB;
+    }
+
+    private boolean isValidTotalFileSize(double size) {
+        return (totalFileSize + size) <= totalFileSizeLimitMB;
+    }
+
     private String correctFileName(String fileName) {
         Pattern pattern = Pattern.compile(" ");
         Matcher matcher = pattern.matcher(fileName);
         return matcher.replaceAll("_");
     }
 
-    private Panel createFileControlElement(UniqueFile file) {
+    private Panel createFileControlElement(UniqueFile file, double fileSize) {
         Panel controlPane;
         Button deleteButton;
         Label fileNameLabel;
@@ -130,6 +171,7 @@ public class ChatWindow extends Frame implements WindowListener {
             }
             filesPanelsList.remove(controlPane);
             filesList.remove(file);
+            totalFileSize =- fileSize;
             remove(controlPane);
             updateLayout();
         });
@@ -248,15 +290,23 @@ public class ChatWindow extends Frame implements WindowListener {
             String filename = fileDialog.getFile();
             String directory = fileDialog.getDirectory();
             if (filename != null) {
+                File file = new File(directory + filename);
+                double fileSize = file.length() / 1048576.0;
                 if (!isValidFile(filename)) {
                     showErrorMessage("Forbidden extension", "File " + filename +  " with such extension is not allowed.");
-                } else  {
-                    File file = new File(directory + filename);
+                } else if (!isValidFileSize(fileSize)) {
+                    showErrorMessage("Maximum file size", "File " + file.getName() + " exceeds maximum file size limit (" + fileSizeLimitMB + ").");
+                } else if (!isValidTotalFileSize(fileSize)) {
+                    showErrorMessage("Maximum total file size", "Adding file " + file.getName() + " exceeds maximum file size limit ( " + totalFileSizeLimitMB + " ) per message.");
+                } else if (isZip(filename) && !checkZipFiles(file)) {
+                    showErrorMessage("Wrong zip", "Zip file " + file.getName() + " contains files with forbidden extensions.");
+                } else {
+                    totalFileSize += fileSize;
                     UniqueFile newFileEntry = new UniqueFile(correctFileName(filename));
                     filesList.add(newFileEntry);
                     try {
                         fileStorageManager.putFileToStorage(file, newFileEntry, sendButton);
-                        Panel filePanel = createFileControlElement(newFileEntry);
+                        Panel filePanel = createFileControlElement(newFileEntry, fileSize);
                         filesPanelsList.add(filePanel);
                         add(filePanel);
                         updateLayout();
