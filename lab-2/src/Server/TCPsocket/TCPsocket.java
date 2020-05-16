@@ -17,13 +17,13 @@ public class TCPsocket extends Thread {
             this.send(msg);
         }
         for (String member : Server.membersList) {
-            this.send("1 0 0 " + member);
+            this.send("1 0 0  " + member);
         }
         start();
     }
 
     private void deleteMember(int sender, int receiver, String text) {
-        String msg = "2 " + sender + " " + receiver + " " + text;
+        String msg = "2 " + sender + " " + receiver + "  " + text;
         for (TCPsocket clientSocket : Server.serverList) {
             clientSocket.send(msg);
         }
@@ -48,7 +48,7 @@ public class TCPsocket extends Thread {
             msg = "0 " + sender + " " + receiver + " " + filesArray + " " + text;
             Server.serverList.get(receiver - 1).send(msg);
             if (sender != receiver) {
-                msg = "0 " + receiver + " " + sender + " " + text;
+                msg = "0 " + receiver + " " + sender + " " + filesArray + " " + text;
                 Server.serverList.get(sender - 1).send(msg);
             }
         }

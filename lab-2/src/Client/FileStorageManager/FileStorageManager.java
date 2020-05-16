@@ -97,7 +97,7 @@ public class FileStorageManager {
                 .build();
 
         HttpClient client = HttpClient.newHttpClient();
-        client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+        client.sendAsync(request, HttpResponse.BodyHandlers.ofByteArray())
                 .thenAccept(response -> {
                     if (response.statusCode() == 200) {
                         File fileObj = new File(file.getOriginalName());
@@ -108,7 +108,7 @@ public class FileStorageManager {
                                 boolean wasCreated = fileObj.createNewFile();
                                 if (wasCreated) {
                                     FileOutputStream fileWriter = new FileOutputStream(fileObj);
-                                    fileWriter.write(response.body().getBytes());
+                                    fileWriter.write(response.body());
                                     fileWriter.flush();
                                     fileWriter.close();
                                 }
@@ -126,7 +126,7 @@ public class FileStorageManager {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(API_URL + generateUniqueName()))
-                    .POST(HttpRequest.BodyPublishers.ofFile(file.toPath()))
+                    .POST(HttpRequest.BodyPublishers.ofByteArray((new FileInputStream(file)).readAllBytes()))
                     .build();
 
             HttpClient client = HttpClient.newHttpClient();
