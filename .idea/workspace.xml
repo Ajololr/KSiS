@@ -7,8 +7,9 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0ab0758d-df5c-44fb-8e1b-fbde31d79772" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="0ab0758d-df5c-44fb-8e1b-fbde31d79772" name="Default Changelist" comment="refactor: delete idea">
+      <change beforePath="$PROJECT_DIR$/lab-3/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab-3/.idea/vcs.xml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,7 +48,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/lab-2" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/lab-3" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -149,8 +150,11 @@
       <workItem from="1587130818441" duration="428000" />
       <workItem from="1587203429992" duration="57000" />
       <workItem from="1587296768743" duration="228000" />
-      <workItem from="1589551615795" duration="90000" />
-      <workItem from="1589562521926" duration="27000" />
+      <workItem from="1587297188768" duration="242000" />
+      <workItem from="1587297517660" duration="599000" />
+      <workItem from="1587375672058" duration="1888000" />
+      <workItem from="1588521608471" duration="9000" />
+      <workItem from="1589551183139" duration="39000" />
     </task>
     <task id="LOCAL-00001" summary="feat: add UDP server socket">
       <created>1585218686754</created>
@@ -257,12 +261,12 @@
       <option name="project" value="LOCAL" />
       <updated>1585674539811</updated>
     </task>
-    <task id="LOCAL-00016" summary="refactor: remove lab-3 folder">
-      <created>1589551671276</created>
+    <task id="LOCAL-00016" summary="refactor: rename folder">
+      <created>1587297300222</created>
       <option name="number" value="00016" />
       <option name="presentableId" value="LOCAL-00016" />
       <option name="project" value="LOCAL" />
-      <updated>1589551671277</updated>
+      <updated>1587297300222</updated>
     </task>
     <option name="localTasksCounter" value="17" />
     <servers />
@@ -285,8 +289,8 @@
     <MESSAGE value="refactor: general code refactor" />
     <MESSAGE value="fix: add cyrillic symbols support" />
     <MESSAGE value="feat: add chat list notifications on unread messages" />
-    <MESSAGE value="refactor: remove lab-3 folder" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor: remove lab-3 folder" />
+    <MESSAGE value="refactor: rename folder" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor: rename folder" />
   </component>
   <component name="WindowStateProjectService">
     <state x="548" y="216" key="#BuildArtifactsBeforeRunChooser" timestamp="1585657440292">
@@ -309,10 +313,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="485" y="54" key="#Server/0.0.1536.824@0.0.1536.824" timestamp="1587297222504" />
-    <state x="223" y="66" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1585657878647">
+    <state x="223" y="66" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1587378151774">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="223" y="66" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1585657878647" />
+    <state x="223" y="66" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1587378151774" />
     <state x="574" y="121" key="#com.intellij.ide.util.MemberChooser" timestamp="1585319226402">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -321,14 +325,18 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="499" y="195" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1536.824@0.0.1536.824" timestamp="1585658062987" />
+    <state x="618" y="300" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1587378169722">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="618" y="300" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1536.824@0.0.1536.824" timestamp="1587378169722" />
     <state x="499" y="158" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog" timestamp="1585224817208">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="499" y="158" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1536.824@0.0.1536.824" timestamp="1585224817208" />
-    <state x="393" y="8" key="CommitChangelistDialog2" timestamp="1589551670749">
+    <state x="393" y="8" key="CommitChangelistDialog2" timestamp="1587297356106">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="393" y="8" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1589551670749" />
+    <state x="393" y="8" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1587297356106" />
     <state width="392" height="466" key="DebuggerActiveHint" timestamp="1585335674393">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -337,10 +345,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="-171" y="94" width="1228" height="689" key="DiffContextDialog/0.0.1536.824@0.0.1536.824" timestamp="1587296989040" />
-    <state x="549" y="166" key="FileChooserDialogImpl" timestamp="1589562548550">
+    <state x="549" y="166" key="FileChooserDialogImpl" timestamp="1589551221976">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="549" y="166" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1589562548550" />
+    <state x="549" y="166" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1589551221976" />
     <state width="1493" height="206" key="GridCell.Tab.0.bottom" timestamp="1587131246157">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -373,6 +381,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1493" height="233" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1585676482008" />
+    <state x="481" y="127" key="MultipleFileMergeDialog" timestamp="1587297410557">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="481" y="127" key="MultipleFileMergeDialog/0.0.1536.824@0.0.1536.824" timestamp="1587297410557" />
     <state x="249" y="0" key="SettingsEditor" timestamp="1585666510267">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -381,10 +393,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="93" y="93" width="1350" height="638" key="ShowDiffWithBranchDialog/0.0.1536.824@0.0.1536.824" timestamp="1587296989040" />
-    <state x="309" y="85" key="Vcs.Push.Dialog.v2" timestamp="1589551673838">
+    <state x="309" y="85" key="Vcs.Push.Dialog.v2" timestamp="1587297310091">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="309" y="85" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1589551673838" />
+    <state x="309" y="85" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1587297310091" />
     <state x="465" y="235" key="com.intellij.ide.util.TipDialog" timestamp="1586256431931">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -393,10 +405,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="462" y="17" width="611" height="789" key="find.popup/0.0.1536.824@0.0.1536.824" timestamp="1585657162984" />
-    <state x="550" y="124" key="git4idea.branch.GitSmartOperationDialog" timestamp="1587296894226">
+    <state x="550" y="124" key="git4idea.branch.GitSmartOperationDialog" timestamp="1587297405037">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="550" y="124" key="git4idea.branch.GitSmartOperationDialog/0.0.1536.824@0.0.1536.824" timestamp="1587296894226" />
+    <state x="550" y="124" key="git4idea.branch.GitSmartOperationDialog/0.0.1536.824@0.0.1536.824" timestamp="1587297405037" />
     <state x="425" y="187" key="run.anything.popup" timestamp="1585636729295">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
