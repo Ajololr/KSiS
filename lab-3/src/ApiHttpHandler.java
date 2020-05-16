@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public class ApiHttpHandler implements HttpHandler {
     private static final String FILES_FOLDER_NAME = "D:\\University\\4 semester\\KSiS\\lab-3\\src\\Files\\";
-    private static HashMap<Integer, File> filesMap = new HashMap<>();
+    private static HashMap<Integer, String> filesMap = new HashMap<>();
 
     @Override
     public void handle(HttpExchange httpExchange) {
@@ -69,8 +69,8 @@ public class ApiHttpHandler implements HttpHandler {
     }
 
     private boolean deleteFileFromStorage(int fileId) throws IOException {
-        File fileObj = filesMap.get(fileId);
-        if (fileObj != null && fileObj.exists()) {
+        File fileObj = new File(filesMap.get(fileId));
+        if (fileObj.exists()) {
             boolean wasDeleted = fileObj.delete();
             if (wasDeleted) {
                 filesMap.remove(fileId);
@@ -123,18 +123,20 @@ public class ApiHttpHandler implements HttpHandler {
     }
 
     private byte[] getFileFromStorage(int fileId) throws IOException {
-        File fileObj = filesMap.get(fileId);
-        if (fileObj != null && fileObj.exists()) {
+        File fileObj = new File(filesMap.get(fileId));
+        if (fileObj.exists()) {
             FileInputStream fileInputStream = new FileInputStream(fileObj);
-            return fileInputStream.readAllBytes();
+            byte[] res = fileInputStream.readAllBytes();
+            System.out.println(res.length);
+            return res;
         } else {
             throw new FileNotFoundException("No file with such ID: "+ fileId);
         }
     }
 
     private FileData getFileData(int fileId) throws FileNotFoundException {
-        File fileObj = filesMap.get(fileId);
-        if (fileObj != null && fileObj.exists()) {
+        File fileObj = new File(filesMap.get(fileId));
+        if (fileObj.exists()) {
             return new FileData(fileObj.getName(), fileObj.length());
         } else {
             throw new FileNotFoundException("No file with such ID: "+ fileId);
@@ -175,7 +177,7 @@ public class ApiHttpHandler implements HttpHandler {
                 fileWriter.close();
             }
         }
-        filesMap.put(fileObj.hashCode(), fileObj);
+        filesMap.put(fileObj.hashCode(), fileObj.getPath());
         return fileObj.hashCode();
     }
 }
