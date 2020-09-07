@@ -1,2 +1,2 @@
 # KSiS
-Repository for KSiS labs
+:mortar_board: Repository for KSiS labs
